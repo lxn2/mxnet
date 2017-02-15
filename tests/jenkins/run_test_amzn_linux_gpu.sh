@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SCRIPT_NAME=`basename "$0"`
+
 echo "BUILD make"
 cp make/config.mk .
 echo "USE_CUDA=0" >> config.mk
