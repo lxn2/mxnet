@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $1 ]];
+then
+    TASK=$1
+fi
+
 echo "BUILD make"
 cp make/config.mk .
 echo "USE_CUDA=1" >> config.mk
@@ -11,54 +16,70 @@ echo "EXTRA_OPERATORS=example/ssd/operator" >> config.mk
 user=`id -u -n`
 make -j$(nproc) || exit 1
 
-echo "BUILD python2 mxnet"
-cd python
-if [ $user == 'root' ]
+if [[ ${TASK} == "cpp" ]];
 then
-    python setup.py install || exit 1
-else
-    python setup.py install --prefix ~/.local || exit 1
+    echo "BUILD cpp_test"
+    make -j$(nproc) test || exit 1
+    export MXNET_ENGINE_INFO=true
+    #for test in tests/cpp/*_test; do
+    #    ./$test || exit 1
+    #done
+    export MXNET_ENGINE_INFO=false
 fi
-cd ..
 
-echo "BUILD python3 mxnet"
-cd python
-if [ $user == 'root' ]
+if [[ ${TASK} == "python" ]];
 then
-    python3 setup.py install || exit 1
-else
-    python3 setup.py install --prefix ~/.local || exit 1
+    echo "BUILD python2 mxnet"
+    cd python
+    if [ $user == 'root' ]
+    then
+        python setup.py install || exit 1
+    else
+        python setup.py install --prefix ~/.local || exit 1
+    fi
+    cd ..
+
+    echo "BUILD python_test"
+    nosetests --verbose tests/python/unittest || exit 1
+    nosetests --verbose tests/python/gpu/test_operator_gpu.py || exit 1
+    nosetests --verbose tests/python/gpu/test_forward.py || exit 1
+    nosetests --verbose tests/python/train || exit 1
+
+    echo "BUILD python3 mxnet"
+    cd python
+    if [ $user == 'root' ]
+    then
+        python3 setup.py install || exit 1
+    else
+        python3 setup.py install --prefix ~/.local || exit 1
+    fi
+    cd ..
+
+    echo "BUILD python3_test"
+    nosetests3 --verbose tests/python/unittest || exit 1
+    nosetests3 --verbose tests/python/gpu/test_operator_gpu.py || exit 1
+    nosetests3 --verbose tests/python/gpu/test_forward.py || exit 1
+    nosetests3 --verbose tests/python/train || exit 1
 fi
-cd ..
 
-echo "BUILD lint"
-make lint || exit 1
+if [[ ${TASK} == "lint" ]];
+then
+    echo "BUILD lint"
+    make lint || exit 1
+fi
 
-echo "BUILD cpp_test"
-make -j$(nproc) test || exit 1
-export MXNET_ENGINE_INFO=true
-#for test in tests/cpp/*_test; do
-#    ./$test || exit 1
-#done
-export MXNET_ENGINE_INFO=false
+if [[ ${TASK} == "r" ]];
+then
+    export CXX=g++
+    export TRAVIS_OS_NAME=linux
+    export CACHE_PREFIX=/tmp
+    tests/travis/run_test.sh
+fi
 
-echo "BUILD python_test"
-nosetests --verbose tests/python/unittest || exit 1
-nosetests --verbose tests/python/gpu/test_operator_gpu.py || exit 1
-nosetests --verbose tests/python/gpu/test_forward.py || exit 1
-nosetests --verbose tests/python/train || exit 1
-
-echo "BUILD python3_test"
-nosetests3 --verbose tests/python/unittest || exit 1
-nosetests3 --verbose tests/python/gpu/test_operator_gpu.py || exit 1
-nosetests3 --verbose tests/python/gpu/test_forward.py || exit 1
-nosetests3 --verbose tests/python/train || exit 1
-
-echo "BUILD scala_test"
-export PATH=$PATH:/opt/apache-maven/bin
-make scalapkg || exit 1
-make scalatest || exit 1
-
-# echo "BUILD julia_test"
-# export MXNET_HOME="${PWD}"
-# /home/ubuntu/julia/bin/julia -e 'try Pkg.clone("MXNet"); catch end; Pkg.checkout("MXNet"); Pkg.build("MXNet"); Pkg.test("MXNet")' || exit 1
+if [[ ${TASK} == "scala" ]];
+then
+    echo "BUILD scala_test"
+    export PATH=$PATH:/opt/apache-maven/bin
+    make scalapkg || exit 1
+    make scalatest || exit 1
+fi
