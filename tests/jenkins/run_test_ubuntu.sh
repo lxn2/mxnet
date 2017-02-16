@@ -35,6 +35,7 @@ then
     echo "EXTRA_OPERATORS=example/ssd/operator" >> config.mk
     user=`id -u -n`
     make -j$(nproc) || exit 1
+    exit 0
 fi
 
 if [[ ${TASK} == "cpp" ]];
@@ -51,31 +52,12 @@ fi
 
 if [[ ${TASK} == "python" ]];
 then
-    echo "BUILD python2 mxnet"
-    cd python
-    if [ $user == 'root' ]
-    then
-        python setup.py install || exit 1
-    else
-        python setup.py install --prefix ~/.local || exit 1
-    fi
-    cd ..
 
     echo "BUILD python_test"
     nosetests --verbose tests/python/unittest || exit 1
     nosetests --verbose tests/python/gpu/test_operator_gpu.py || exit 1
     nosetests --verbose tests/python/gpu/test_forward.py || exit 1
     nosetests --verbose tests/python/train || exit 1
-
-    echo "BUILD python3 mxnet"
-    cd python
-    if [ $user == 'root' ]
-    then
-        python3 setup.py install || exit 1
-    else
-        python3 setup.py install --prefix ~/.local || exit 1
-    fi
-    cd ..
 
     echo "BUILD python3_test"
     nosetests3 --verbose tests/python/unittest || exit 1
