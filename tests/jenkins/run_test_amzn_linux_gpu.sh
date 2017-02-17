@@ -2,6 +2,19 @@
 
 SCRIPT_NAME=`basename "$0"`
 
+if [[ $1 ]];
+then
+    if [[ $1 == "--help" ]];
+    then
+        echo "USAGE:"
+        echo ${SCRIPT_NAME} "TASK"
+        echo ""
+	echo "TASK can be one of: lint, make, cpp, python, r, scala"
+        exit 0
+    fi
+    TASK=$1
+fi
+
 echo "BUILD make"
 cp make/config.mk .
 echo "USE_CUDA=0" >> config.mk
