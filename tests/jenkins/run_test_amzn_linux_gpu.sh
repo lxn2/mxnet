@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export HOME=/home/ec2-user
+
 echo "BUILD make"
 cp make/config.mk .
 echo "USE_CUDA=0" >> config.mk
