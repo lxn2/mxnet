@@ -1,6 +1,16 @@
 #!/bin/bash
+
+
+FLAG=$( echo "$1" | tr '[:upper:]' '[:lower:]' )
 ROOT_DIR=$(cd `dirname $0`/../../..; pwd)
-CLASSPATH=$ROOT_DIR/assembly/linux-x86_64-cpu/target/*:$ROOT_DIR/examples/target/*:$ROOT_DIR/examples/target/classes/lib/*
+CLASSPATH=
+if [[ "${FLAG}" == "--gpu" ]]; then
+    CLASSPATH=${CLASSPATH}:$ROOT_DIR/assembly/linux-x86_64-gpu/target/*
+else
+    CLASSPATH=${CLASSPATH}:$ROOT_DIR/assembly/linux-x86_64-cpu/target/*
+fi
+
+CLASSPATH=${CLASSPATH}:$ROOT_DIR/examples/target/*:$ROOT_DIR/examples/target/classes/lib/*
 
 DATA_DIR=$ROOT_DIR/core/data
 
