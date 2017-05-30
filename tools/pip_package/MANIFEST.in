@@ -1,3 +1,5 @@
 include README
-recursive-include * *.py
-recursive-include * *.so
+recursive-include mxnet/tools *
+recursive-include mxnet *.py
+recursive-include mxnet *.so
+recursive-include mxnet *_LICENSE

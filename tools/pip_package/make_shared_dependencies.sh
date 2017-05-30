@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 
-# Assuming the script is run at mxnet/tools/pip_package
-# This script builds from scratch the dependencies of mxnet into static
-# librareis and statically links them to produce a (mostly) standalone
-# libmxnet.so, then packages it into the python wheel.
-# It assumes the build environment to be a sandbox that doesn't have the .so
-# objects for the dependencies, i.e. zlib, openblas, libjpeg, libpng, libtiff
-# and opencv.
-
 # Dependencies that are shared by variants are:
 ZLIB_VERSION=1.2.6
 JPEG_VERSION=8.4.0

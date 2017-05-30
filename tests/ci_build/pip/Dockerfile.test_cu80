@@ -1,0 +1,7 @@
+FROM nvidia/cuda:8.0-cudnn5-devel-ubuntu14.04
+MAINTAINER Ly Nguyen <nguyenlyx@gmail.com
+
+# install all tools needed for testing
+RUN apt-get update && apt-get install -y python wget
+RUN wget https://bootstrap.pypa.io/get-pip.py && sudo python get-pip.py && rm get-pip.py*
+RUN pip install -U virtualenv

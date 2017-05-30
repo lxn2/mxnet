@@ -1,0 +1,7 @@
+FROM ubuntu:14.04
+MAINTAINER Ly Nguyen <nguyenlyx@gmail.com
+
+# install all tools needed for building dependencies and the distributions
+RUN apt-get update && apt-get install -y git make curl unzip cmake g++ pkg-config python wget
+RUN wget https://bootstrap.pypa.io/get-pip.py && sudo python get-pip.py && rm get-pip.py*
+RUN pip install -U virtualenv
