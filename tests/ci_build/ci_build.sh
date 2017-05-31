@@ -68,7 +68,8 @@ function upsearch () {
         test -e "$1" && echo "$PWD" && return || \
         cd .. && upsearch "$1"
 }
-
+echo "WORKSPACE: ${WORKSPACE}"
+echo "SCRIPT_DIR: ${SCRIPT_DIR}"
 # Set up WORKSPACE and BUILD_TAG. Jenkins will set them for you or we pick
 # reasonable defaults if you run it outside of Jenkins.
 WORKSPACE="${WORKSPACE:-${SCRIPT_DIR}/../../}"
@@ -122,7 +123,7 @@ echo "Running '${COMMAND[@]}' inside ${DOCKER_IMG_NAME}..."
 # and share the PID namespace (--pid=host) so the process inside does not have
 # pid 1 and SIGKILL is propagated to the process inside (jenkins can kill it).
 ${DOCKER_BINARY} run --rm --pid=host \
-    -v ${WORKSPACE}:/workspace \
+    -v ${PWD}:/workspace \
     -w /workspace \
     -e "CI_BUILD_HOME=${WORKSPACE}" \
     -e "CI_BUILD_USER=$(id -u -n)" \
@@ -131,6 +132,6 @@ ${DOCKER_BINARY} run --rm --pid=host \
     -e "CI_BUILD_GID=$(id -g)" \
     ${CI_DOCKER_EXTRA_PARAMS[@]} \
     ${DOCKER_IMG_NAME} \
-    bash -c "ls && echo hello $PWD $WORKSPACE"
-    #${PRE_COMMAND} \
-    #${COMMAND[@]}
+    #bash -c "ls && echo hello $PWD $WORKSPACE"
+    ${PRE_COMMAND} \
+    ${COMMAND[@]}
