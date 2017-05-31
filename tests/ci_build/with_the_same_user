@@ -19,6 +19,7 @@ else
   rm /this_is_writable_file_system
 fi
 
+apt-get install -y gawk
 if [[ `gawk -F= '/^NAME/{print $2}' /etc/os-release` == *"Amazon Linux AMI"* ]]; then
     HOME_DIR=/home/${CI_BUILD_USER}
     groupadd -f -g ${CI_BUILD_GID} ${CI_BUILD_GROUP}

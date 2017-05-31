@@ -16,4 +16,4 @@ virtualenv pip_release
 source pip_release/bin/activate
 pip install -U pip setuptools>=28.2 wheel pypandoc
 python -c 'from pypandoc.pandoc_download import download_pandoc; download_pandoc()'
-export mxnet_variant=$1 && ./make_standalone_libmxnet.sh $1;
+export mxnet_variant=$1 && tools/pip_package/make_standalone_libmxnet.sh $1;
