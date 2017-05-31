@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+set -e
+
 if [ $# -lt 1 ]; then
     echo "Usage: make_standalone_libmxnet.sh <VARIANT>[CPU|MKL|CU75|CU80|CU75MKL|CU80MKL]"
     exit 1
@@ -70,8 +73,8 @@ echo "Using $NUM_PROC parallel jobs in building."
 
 
 # Set up shared dependencies:
-./make_shared_dependencies.sh
-./make_openblas.sh
+${SCRIPT_DIR}/make_shared_dependencies.sh
+${SCRIPT_DIR}/make_openblas.sh
 
 # Although .so/.dylib building is explicitly turned off for most libraries, sometimes
 # they still get created. So, remove them just to make sure they don't
@@ -87,7 +90,7 @@ if [[ $PLATFORM == 'linux' ]]; then
         # ./make_mklml_mkldnn.sh
     if [[ ( $VARIANT == cu75* ) || ( $VARIANT == cu80* ) ]]; then
         # download and install cuda and cudnn, and set paths
-        ./setup_gpu_build_tools.sh
+        ${SCRIPT_DIR}/setup_gpu_build_tools.sh
         CUDA_MAJOR_VERSION=$(echo $CUDA_VERSION | tr '-' '.' | cut -d. -f1,2)
         NVIDIA_MAJOR_VERSION=$(echo $LIBCUDA_VERSION | cut -d. -f1)
         export PATH=${PATH}:$DEPS_PATH/usr/local/cuda-$CUDA_MAJOR_VERSION/bin
