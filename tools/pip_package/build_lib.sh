@@ -11,7 +11,7 @@ if [[ $# -lt 1 ]]  || [[ ! "$1" == "CPU" ]] && [[ ! "$1" == "MKL" ]] && [[ ! "$1
     echo "Usage: $(basename $0) <VARIANT>[CPU|MKL|CU75|CU80|CU75MKL|CU80MKL]"
     exit 1
 fi
-echo "continuing"
+
 virtualenv pip_release
 source pip_release/bin/activate
 pip install -U pip setuptools>=28.2 wheel pypandoc

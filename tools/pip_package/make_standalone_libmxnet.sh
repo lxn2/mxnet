@@ -13,7 +13,7 @@ fi
 VARIANT=$(echo $1 | tr '[:upper:]' '[:lower:]')
 PLATFORM=$(uname | tr '[:upper:]' '[:lower:]')
 
-make_config=pip_${PLATFORM}_${VARIANT}.mk
+make_config=./pip_${PLATFORM}_${VARIANT}.mk
 if [[ ! -f $make_config ]]; then
     echo "Couldn't find make config $make_config for the current settings."
     exit 1
