@@ -12,8 +12,9 @@ fi
 # CU80 version depends on and downloads cuda-8.0 and cudnn-6.0. cudnn is statically linked
 VARIANT=$(echo $1 | tr '[:upper:]' '[:lower:]')
 PLATFORM=$(uname | tr '[:upper:]' '[:lower:]')
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-make_config=./pip_${PLATFORM}_${VARIANT}.mk
+make_config=${SCRIPT_DIR}/pip_${PLATFORM}_${VARIANT}.mk
 if [[ ! -f $make_config ]]; then
     echo "Couldn't find make config $make_config for the current settings."
     exit 1
