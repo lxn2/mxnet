@@ -81,7 +81,9 @@ ${SCRIPT_DIR}/make_openblas.sh
 # interfere, or otherwise we might get libmxnet.so that is not self-contained.
 # For CUDA, since we cannot redistribute the shared objects or perform static linking,
 # we DO want to keep the shared objects around, hence performing deletion before cuda setup.
+set +e
 rm $DEPS_PATH/{lib,lib64}/*.{so,so.*,dylib}
+set -e
 
 if [[ $PLATFORM == 'linux' ]]; then
 
