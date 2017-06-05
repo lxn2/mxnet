@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Dependencies that are shared by variants are:
 ZLIB_VERSION=1.2.6
 JPEG_VERSION=8.4.0
