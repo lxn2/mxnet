@@ -39,7 +39,7 @@ stage('Build') {
       ws('workspace/cu80') {
         init_git()
         sh "echo $PWD & ls -l"
-        sh "${docker_run} cpu --dockerfile tests/ci_build/pip/Dockerfile.build cd tools/pip_package ./build_lib.sh CU80"
+        sh "${docker_run} cpu --dockerfile tests/ci_build/pip/Dockerfile.build cd tools/pip_package; ./build_lib.sh CU80"
         pack_whl('cu80')
       }
     }
@@ -48,7 +48,7 @@ stage('Build') {
     node('p2') {
       ws('workspace/cpu') {
         init_git()
-        sh "${docker_run} cpu --dockerfile tests/ci_build/pip/Dockerfile.build cd tools/pip_package ./build_lib.sh CPU"
+        sh "${docker_run} cpu --dockerfile tests/ci_build/pip/Dockerfile.build cd tools/pip_package; ./build_lib.sh CPU"
         pack_whl('cpu')
       }
     }
