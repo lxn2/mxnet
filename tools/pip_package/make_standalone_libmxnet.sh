@@ -132,7 +132,7 @@ elif [[ ! -z $(command -v otool) ]]; then
 else
     echo "Not available"
 fi
-source pip_release/bin/activate
+
 # Make wheel for testing
 python setup.py bdist_wheel
 
@@ -141,7 +141,7 @@ python setup.py bdist_wheel
 # The output will be in the 'dist' path.
 
 set -eo pipefail
-source pip_release/bin/activate
+
 wheel_name=$(ls -t dist | head -n 1)
 pip install -U --force-reinstall dist/$wheel_name
 python sanity_test.py
